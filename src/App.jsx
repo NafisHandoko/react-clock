@@ -24,7 +24,7 @@ function App() {
           <div id="session-label">Session Length</div>
             <div className="session-control">
               <button id="session-decrement">-</button>
-              <span id="session-length">5</span>
+              <span id="session-length">25</span>
               <button id="session-increment">+</button>
             </div>
           </div>
@@ -34,15 +34,20 @@ function App() {
           <div id="time-left">25:00</div>
           <div className="time-control">
             <button id="start_stop">
-              <i class="bi bi-play-fill"></i>
+              <i className="bi bi-play-fill"></i>
             </button>
             <button id="reset">
-              <i class="bi bi-arrow-clockwise"></i>
+              <i className="bi bi-arrow-clockwise"></i>
             </button>
           </div>
         </div>
       </section>
-      <footer></footer>
+      <footer>
+        <a className='repo' href="https://github.com/NafisHandoko/react-clock" target="_blank" rel="noopener noreferrer">
+          <i className="bi bi-github"></i>
+        </a>
+        Made with ❤️ by Nafis Handoko
+      </footer>
     </div>
   )
 }
