@@ -33,8 +33,12 @@ function App() {
           <div id="timer-label">Session</div>
           <div id="time-left">25:00</div>
           <div className="time-control">
-            <button id="start_stop"></button>
-            <button id="reset"></button>
+            <button id="start_stop">
+              <i class="bi bi-play-fill"></i>
+            </button>
+            <button id="reset">
+              <i class="bi bi-arrow-clockwise"></i>
+            </button>
           </div>
         </div>
       </section>

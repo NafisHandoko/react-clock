@@ -11,6 +11,10 @@ body{
   color: white;
 }
 
+button{
+  cursor: pointer;
+}
+
 .container{
   height: 100vh;
   display: flex;
@@ -71,11 +75,24 @@ section{
   font-size: 32px;
 }
 
+.clock{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 #timer-label{
   font-size: 48px;
+  font-weight: 500;
 }
 
 #time-left{
   font-size: 96px;
   font-weight: 700;
+}
+
+.clock button{
+  border: none;
+  background-color: transparent;
+  font-size: 30px;
 }
