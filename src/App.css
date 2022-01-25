@@ -19,7 +19,63 @@ body{
   justify-content: center;
 }
 
+h1{
+  font-size: 64px;
+}
+
 section{
   display: flex;
   flex-direction: row;
+  align-items: center;
+}
+
+.break-session{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-right: 165px;
+}
+
+.break, .session{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 30px;
+}
+
+#break-label, #session-label{
+  font-size: 32px;
+  font-weight: 500;
+  padding-bottom: 10px;
+}
+
+#break-length, #session-length{
+  font-size: 36px;
+  font-weight: 700;
+  padding: 0 25px 0 25px;
+}
+
+.break-control, .session-control{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.break-session button{
+  border: none;
+  border-radius: 100px;
+  width: 45px;
+  height: 45px;
+  background-color: white;
+  color: #5D473F;
+  font-size: 32px;
+}
+
+#timer-label{
+  font-size: 48px;
+}
+
+#time-left{
+  font-size: 96px;
+  font-weight: 700;
 }
