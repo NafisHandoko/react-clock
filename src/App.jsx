@@ -9,30 +9,49 @@ function App() {
   const [timer, isTargetAchieved] = useTimer({
     precision: 'seconds',
     countdown: true,
-    startValues: {minutes: session},
     target: { seconds: 0 }
   })
   const timerRef = useRef(null)
+  const [isStarted, setIsStarted] = useState(0)
 
-  const startTimer = () => {
-    timer.start({
-      startValues: {minutes: session}
-    })
+  const startStopTimer = () => {
+    if(isStarted==0){
+      timer.start({
+        startValues: {minutes: session}
+      })
+      setIsStarted(1)
+    }else{
+      timer.stop()
+      setIsStarted(0)
+    }
   }
 
-  const stopTimer = () => {
+  const resetTimer = () => {
+    timer.reset()
     timer.stop()
+    setIsStarted(0)
+    setBreak(5)
+    setSession(25)
   }
 
-  const addSession = () => {
-    setSession(session+1)
+  const startBreakTimer = () => {
+    timer.start({
+      startValues: {minutes: _break}
+    })
   }
 
   useEffect(() => {
     timer.addEventListener('secondsUpdated', () => {
       timerRef.current.innerHTML = timer.getTimeValues().toString(['minutes', 'seconds'])
     })
-  })
+  },[])
+
+  useEffect(() => {
+    timer.addEventListener('targetAchieved', startBreakTimer)
+    return () => {
+      timer.removeEventListener('targetAchieved', startBreakTimer)
+    }
+  },[_break])
 
   return (
     <div className="container">
@@ -62,10 +81,10 @@ function App() {
           <div id="timer-label">Session</div>
           <div id="time-left" ref={timerRef}>{`${session}:00`}</div>
           <div className="time-control">
-            <button id="start_stop" onClick={startTimer}>
+            <button id="start_stop" onClick={startStopTimer}>
               <i className="bi bi-play-fill"></i>
             </button>
-            <button id="reset" onClick={stopTimer}>
+            <button id="reset" onClick={resetTimer}>
               <i className="bi bi-arrow-clockwise"></i>
             </button>
           </div>
