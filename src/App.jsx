@@ -68,6 +68,30 @@ function App() {
     }
   },[_break])
 
+  const plusSession = () => {
+    if(session+1<=60){
+      setSession(session+1)
+    }
+  }
+
+  const minSession = () => {
+    if(session-1>=1){
+      setSession(session-1)
+    }
+  }
+
+  const plusBreak = () => {
+    if(_break+1<=60){
+      setBreak(_break+1)
+    }
+  }
+
+  const minBreak = () => {
+    if(_break-1>=1){
+      setBreak(_break-1)
+    }
+  }
+
   return (
     <div className="container">
       <header>
@@ -78,17 +102,17 @@ function App() {
           <div className="break">
             <div id="break-label">Break Length</div>
             <div className="break-control">
-              <button id="break-decrement" onClick={() => setBreak(_break-1)}>-</button>
+              <button id="break-decrement" onClick={minBreak}>-</button>
               <span id="break-length">{_break}</span>
-              <button id="break-increment" onClick={() => setBreak(_break+1)}>+</button>
+              <button id="break-increment" onClick={plusBreak}>+</button>
             </div>
           </div>
           <div className="session">
           <div id="session-label">Session Length</div>
             <div className="session-control">
-              <button id="session-decrement" onClick={() => setSession(session-1)}>-</button>
+              <button id="session-decrement" onClick={minSession}>-</button>
               <span id="session-length">{session}</span>
-              <button id="session-increment" onClick={() => setSession(session+1)}>+</button>
+              <button id="session-increment" onClick={plusSession}>+</button>
             </div>
           </div>
         </div>
