@@ -17,6 +17,7 @@ function App() {
     target: { seconds: 0 }
   })
   const timerRef = useRef(null)
+  const timerLabel = useRef(null)
   const [session_isStarted, setSessionIsStarted] = useState(0)
   const [break_isStarted, setBreakIsStarted] = useState(0)
 
@@ -26,13 +27,29 @@ function App() {
         startValues: {minutes: session}
       })
       setSessionIsStarted(1)
+      setBreakIsStarted(0)
     }else{
       session_timer.stop()
       setSessionIsStarted(0)
+      setBreakIsStarted(1)
     }
   }
 
-  const resetSessionTimer = () => {
+  const startStopBreakTimer = () => {
+    if(break_isStarted==0){
+      break_timer.start({
+        startValues: {minutes: _break}
+      })
+      setBreakIsStarted(1)
+      setSessionIsStarted(0)
+    }else{
+      break_timer.stop()
+      setBreakIsStarted(0)
+      setSessionIsStarted(1)
+    }
+  }
+
+  const resetTimer = () => {
     session_timer.reset()
     session_timer.stop()
     break_timer.reset()
@@ -43,15 +60,12 @@ function App() {
     setSession(25)
   }
 
-  const startBreakTimer = () => {
-    break_timer.start({
-      startValues: {minutes: _break}
-    })
-  }
-
   useEffect(() => {
     session_timer.addEventListener('secondsUpdated', () => {
       timerRef.current.innerHTML = session_timer.getTimeValues().toString(['minutes', 'seconds'])
+    })
+    session_timer.addEventListener('started', () => {
+      timerLabel.current.innerHTML = 'Session'
     })
   },[])
 
@@ -59,14 +73,24 @@ function App() {
     break_timer.addEventListener('secondsUpdated', () => {
       timerRef.current.innerHTML = break_timer.getTimeValues().toString(['minutes', 'seconds'])
     })
+    break_timer.addEventListener('started', () => {
+      timerLabel.current.innerHTML = 'Break'
+    })
   },[])
 
   useEffect(() => {
-    session_timer.addEventListener('targetAchieved', startBreakTimer)
+    session_timer.addEventListener('targetAchieved', startStopBreakTimer)
     return () => {
-      session_timer.removeEventListener('targetAchieved', startBreakTimer)
+      session_timer.removeEventListener('targetAchieved', startStopBreakTimer)
     }
   },[_break])
+
+  useEffect(() => {
+    break_timer.addEventListener('targetAchieved', startStopSessionTimer)
+    return () => {
+      break_timer.removeEventListener('targetAchieved', startStopSessionTimer)
+    }
+  },[session])
 
   const plusSession = () => {
     if(session+1<=60){
@@ -117,13 +141,13 @@ function App() {
           </div>
         </div>
         <div className='clock'>
-          <div id="timer-label">Session</div>
+          <div id="timer-label" ref={timerLabel}>Session</div>
           <div id="time-left" ref={timerRef}>{`${session}:00`}</div>
           <div className="time-control">
             <button id="start_stop" onClick={startStopSessionTimer}>
               <i className="bi bi-play-fill"></i>
             </button>
-            <button id="reset" onClick={resetSessionTimer}>
+            <button id="reset" onClick={resetTimer}>
               <i className="bi bi-arrow-clockwise"></i>
             </button>
           </div>
