@@ -21,43 +21,85 @@ function App() {
   const audioRef = useRef(null)
   const [session_isStarted, setSessionIsStarted] = useState(0)
   const [break_isStarted, setBreakIsStarted] = useState(0)
+  const [isInSession, setIsInSession] = useState(0)
+  const [isInBreak, setIsInBreak] = useState(0)
 
-  const startStopSessionTimer = () => {
-    if(session_isStarted==0){
+  // const startStopSessionTimer = () => {
+  //   if(session_isStarted==0){
+  //     session_timer.start({
+  //       startValues: {minutes: session}
+  //     })
+  //     setSessionIsStarted(1)
+  //     setBreakIsStarted(0)
+  //   }else{
+  //     session_timer.pause()
+  //     setSessionIsStarted(0)
+  //     setBreakIsStarted(1)
+  //   }
+  // }
+
+  const startStopTimer = () => {
+    if(isInSession==0 && isInBreak==0){
       session_timer.start({
         startValues: {minutes: session}
       })
       setSessionIsStarted(1)
-      setBreakIsStarted(0)
-    }else{
-      session_timer.stop()
-      setSessionIsStarted(0)
-      setBreakIsStarted(1)
+      setIsInSession(1)
+    }else if(isInSession==1 && isInBreak==0){
+      if(session_isStarted==1){
+        session_timer.pause()
+        setSessionIsStarted(0)
+      }else if(session_isStarted==0){
+        session_timer.start({
+          startValues: {minutes: session}
+        })
+        setSessionIsStarted(1)
+      }
+    }else if(isInSession==0 && isInBreak==1){
+      if(break_isStarted==1){
+        break_timer.pause()
+        setBreakIsStarted(0)
+      }else if(break_isStarted==0){
+        break_timer.start({
+          startValues: {minutes: _break}
+        })
+        setBreakIsStarted(1)
+      }
     }
   }
 
-  const startStopBreakTimer = () => {
-    if(break_isStarted==0){
-      break_timer.start({
-        startValues: {minutes: _break}
-      })
-      setBreakIsStarted(1)
-      setSessionIsStarted(0)
-    }else{
-      break_timer.stop()
-      setBreakIsStarted(0)
-      setSessionIsStarted(1)
-    }
-  }
+  // const startStopBreakTimer = () => {
+  //   if(break_isStarted==0){
+  //     break_timer.start({
+  //       startValues: {minutes: _break}
+  //     })
+  //     setBreakIsStarted(1)
+  //     setSessionIsStarted(0)
+  //   }else{
+  //     break_timer.pause()
+  //     setBreakIsStarted(0)
+  //     setSessionIsStarted(1)
+  //   }
+  // }
 
   const sessionTimerEnd = () => {
+    setSessionIsStarted(0)
+    setBreakIsStarted(1)
+    setIsInSession(0)
     audioRef.current.play()
-    startStopBreakTimer()
+    break_timer.start({
+      startValues: {minutes: _break}
+    })
   }
 
   const breakTimerEnd = () => {
+    setSessionIsStarted(1)
+    setBreakIsStarted(0)
+    setIsInBreak(0)
     audioRef.current.play()
-    startStopSessionTimer()
+    session_timer.start({
+      startValues: {minutes: session}
+    })
   }
 
   const resetTimer = () => {
@@ -70,6 +112,8 @@ function App() {
     setBreakIsStarted(0)
     setBreak(5)
     setSession(25)
+    setIsInBreak(0)
+    setIsInSession(0)
     timerRef.current.innerHTML = `${session}:00`
     audioRef.current.pause()
     audioRef.current.currentTime = 0
@@ -81,6 +125,7 @@ function App() {
     })
     session_timer.addEventListener('started', () => {
       timerLabel.current.innerHTML = 'Session'
+      setIsInSession(1)
     })
   },[])
 
@@ -90,6 +135,7 @@ function App() {
     })
     break_timer.addEventListener('started', () => {
       timerLabel.current.innerHTML = 'Break'
+      setIsInBreak(1)
     })
   },[])
 
@@ -159,7 +205,7 @@ function App() {
           <div id="timer-label" ref={timerLabel}>Session</div>
           <div id="time-left" ref={timerRef}>{`${session}:00`}</div>
           <div className="time-control">
-            <button id="start_stop" onClick={startStopSessionTimer}>
+            <button id="start_stop" onClick={startStopTimer}>
               <i className="bi bi-play-fill"></i>
             </button>
             <button id="reset" onClick={resetTimer}>
