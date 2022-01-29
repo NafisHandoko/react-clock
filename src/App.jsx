@@ -18,6 +18,7 @@ function App() {
   })
   const timerRef = useRef(null)
   const timerLabel = useRef(null)
+  const audioRef = useRef(null)
   const [session_isStarted, setSessionIsStarted] = useState(0)
   const [break_isStarted, setBreakIsStarted] = useState(0)
 
@@ -49,10 +50,20 @@ function App() {
     }
   }
 
+  const sessionTimerEnd = () => {
+    audioRef.current.play()
+    startStopBreakTimer()
+  }
+
+  const breakTimerEnd = () => {
+    audioRef.current.play()
+    startStopSessionTimer()
+  }
+
   const resetTimer = () => {
-    session_timer.reset()
+    // session_timer.reset()
     session_timer.stop()
-    break_timer.reset()
+    // break_timer.reset()
     break_timer.stop()
     setSessionIsStarted(0)
     setBreakIsStarted(0)
@@ -79,16 +90,16 @@ function App() {
   },[])
 
   useEffect(() => {
-    session_timer.addEventListener('targetAchieved', startStopBreakTimer)
+    session_timer.addEventListener('targetAchieved', sessionTimerEnd)
     return () => {
-      session_timer.removeEventListener('targetAchieved', startStopBreakTimer)
+      session_timer.removeEventListener('targetAchieved', sessionTimerEnd)
     }
   },[_break])
 
   useEffect(() => {
-    break_timer.addEventListener('targetAchieved', startStopSessionTimer)
+    break_timer.addEventListener('targetAchieved', breakTimerEnd)
     return () => {
-      break_timer.removeEventListener('targetAchieved', startStopSessionTimer)
+      break_timer.removeEventListener('targetAchieved', breakTimerEnd)
     }
   },[session])
 
@@ -152,6 +163,7 @@ function App() {
             </button>
           </div>
         </div>
+        <audio ref={audioRef} id="beep" preload="auto" src="https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"></audio>
       </section>
       <footer>
         <a className='repo' href="https://github.com/NafisHandoko/react-clock" target="_blank" rel="noopener noreferrer">
