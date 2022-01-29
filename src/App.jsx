@@ -65,10 +65,14 @@ function App() {
     session_timer.stop()
     // break_timer.reset()
     break_timer.stop()
+    timerLabel.current.innerHTML = 'Session'
     setSessionIsStarted(0)
     setBreakIsStarted(0)
     setBreak(5)
     setSession(25)
+    timerRef.current.innerHTML = `${session}:00`
+    audioRef.current.pause()
+    audioRef.current.currentTime = 0
   }
 
   useEffect(() => {
