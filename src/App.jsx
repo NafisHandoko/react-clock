@@ -140,6 +140,9 @@ function App() {
   },[])
 
   useEffect(() => {
+    if(isInBreak==1){
+      timerRef.current.innerHTML = `${_break}:00`
+    }
     session_timer.addEventListener('targetAchieved', sessionTimerEnd)
     return () => {
       session_timer.removeEventListener('targetAchieved', sessionTimerEnd)
@@ -147,6 +150,9 @@ function App() {
   },[_break])
 
   useEffect(() => {
+    if(isInBreak==0){
+      timerRef.current.innerHTML = `${session}:00`
+    }
     break_timer.addEventListener('targetAchieved', breakTimerEnd)
     return () => {
       break_timer.removeEventListener('targetAchieved', breakTimerEnd)
@@ -154,25 +160,37 @@ function App() {
   },[session])
 
   const plusSession = () => {
-    if(session+1<=60){
+    if(session+1<=60 && session_isStarted==0){
+      if(isInSession==1){
+        session_timer.stop()
+      }
       setSession(session+1)
     }
   }
 
   const minSession = () => {
-    if(session-1>=1){
+    if(session-1>=1 && session_isStarted==0){
+      if(isInSession==1){
+        session_timer.stop()
+      }
       setSession(session-1)
     }
   }
 
   const plusBreak = () => {
-    if(_break+1<=60){
+    if(_break+1<=60 && break_isStarted==0){
+      if(isInBreak==1){
+        break_timer.stop()
+      }
       setBreak(_break+1)
     }
   }
 
   const minBreak = () => {
-    if(_break-1>=1){
+    if(_break-1>=1 && break_isStarted==0){
+      if(isInBreak==1){
+        break_timer.stop()
+      }
       setBreak(_break-1)
     }
   }
@@ -203,7 +221,7 @@ function App() {
         </div>
         <div className='clock'>
           <div id="timer-label" ref={timerLabel}>Session</div>
-          <div id="time-left" ref={timerRef}>{`${session}:00`}</div>
+          <div id="time-left" ref={timerRef}>25:00</div>
           <div className="time-control">
             <button id="start_stop" onClick={startStopTimer}>
               <i className="bi bi-play-fill"></i>
