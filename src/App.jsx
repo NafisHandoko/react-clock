@@ -23,6 +23,7 @@ function App() {
   const [break_isStarted, setBreakIsStarted] = useState(0)
   const [isInSession, setIsInSession] = useState(0)
   const [isInBreak, setIsInBreak] = useState(0)
+  const [isResetting, setIsResetting] = useState(0)
 
   // const startStopSessionTimer = () => {
   //   if(session_isStarted==0){
@@ -103,20 +104,20 @@ function App() {
   }
 
   const resetTimer = () => {
-    // session_timer.reset()
+    setIsResetting(1)
     session_timer.stop()
-    // break_timer.reset()
     break_timer.stop()
     timerLabel.current.innerHTML = 'Session'
     setSessionIsStarted(0)
     setBreakIsStarted(0)
-    setBreak(5)
-    setSession(25)
     setIsInBreak(0)
     setIsInSession(0)
-    timerRef.current.innerHTML = `${session}:00`
+    setSession(25)
+    setBreak(5)
+    timerRef.current.innerHTML = `${isInBreak==1?_break:session}:00`
     audioRef.current.pause()
     audioRef.current.currentTime = 0
+    setIsResetting(0)
   }
 
   useEffect(() => {
@@ -140,8 +141,8 @@ function App() {
   },[])
 
   useEffect(() => {
-    if(isInBreak==1){
-      timerRef.current.innerHTML = `${_break}:00`
+    if(isInBreak==1 && isResetting==0){
+      timerRef.current.innerHTML = `${isInBreak==1?_break:session}:00`
     }
     session_timer.addEventListener('targetAchieved', sessionTimerEnd)
     return () => {
@@ -150,8 +151,8 @@ function App() {
   },[_break])
 
   useEffect(() => {
-    if(isInBreak==0){
-      timerRef.current.innerHTML = `${session}:00`
+    if(isInBreak==0 && isResetting==0){
+      timerRef.current.innerHTML = `${isInBreak==1?_break:session}:00`
     }
     break_timer.addEventListener('targetAchieved', breakTimerEnd)
     return () => {
@@ -221,7 +222,7 @@ function App() {
         </div>
         <div className='clock'>
           <div id="timer-label" ref={timerLabel}>Session</div>
-          <div id="time-left" ref={timerRef}>25:00</div>
+          <div id="time-left" ref={timerRef}>{`${isInBreak==1?_break:session}:00`}</div>
           <div className="time-control">
             <button id="start_stop" onClick={startStopTimer}>
               <i className="bi bi-play-fill"></i>
