@@ -26,20 +26,6 @@ function App() {
   const [timerLabel, setTimerLabel] = useState('Session')
   const [timeOutput, setTimeOutput] = useState(session)
 
-  // const startStopSessionTimer = () => {
-  //   if(session_isStarted==0){
-  //     session_timer.start({
-  //       startValues: {minutes: session}
-  //     })
-  //     setSessionIsStarted(1)
-  //     setBreakIsStarted(0)
-  //   }else{
-  //     session_timer.pause()
-  //     setSessionIsStarted(0)
-  //     setBreakIsStarted(1)
-  //   }
-  // }
-
   const startStopTimer = () => {
     if(isInSession==0 && isInBreak==0){
       session_timer.start({
@@ -70,20 +56,6 @@ function App() {
     }
   }
 
-  // const startStopBreakTimer = () => {
-  //   if(break_isStarted==0){
-  //     break_timer.start({
-  //       startValues: {minutes: _break}
-  //     })
-  //     setBreakIsStarted(1)
-  //     setSessionIsStarted(0)
-  //   }else{
-  //     break_timer.pause()
-  //     setBreakIsStarted(0)
-  //     setSessionIsStarted(1)
-  //   }
-  // }
-
   const sessionTimerEnd = () => {
     setSessionIsStarted(0)
     setBreakIsStarted(1)
@@ -92,7 +64,6 @@ function App() {
     break_timer.start({
       startValues: {minutes: _break, seconds: 1}
     })
-    // setTimerLabel('Break')
   }
 
   const breakTimerEnd = () => {
@@ -103,7 +74,6 @@ function App() {
     session_timer.start({
       startValues: {minutes: session, seconds: 1}
     })
-    // setTimerLabel('Session')
   }
 
   const resetTimer = () => {
@@ -118,7 +88,6 @@ function App() {
     setSession(25)
     setBreak(5)
     setTimeOutput(25)
-    // timerRef.current.innerHTML = `${isInBreak==1?_break:session}:00`
     timerRef.current.innerHTML = `${timeOutput}:00`
     audioRef.current.pause()
     audioRef.current.currentTime = 0
@@ -146,9 +115,6 @@ function App() {
   },[])
 
   useEffect(() => {
-    // if(isInBreak==1 && isResetting==0){
-    //   timerRef.current.innerHTML = `${isInBreak==1?_break:session}:00`
-    // }
     if(isResetting==0 && isInBreak==1){
       setTimeOutput(_break)
     }
@@ -159,9 +125,6 @@ function App() {
   },[_break])
 
   useEffect(() => {
-    // if(isInBreak==0 && isResetting==0){
-    //   timerRef.current.innerHTML = `${isInBreak==1?_break:session}:00`
-    // }
     if(isResetting==0 && isInBreak==0){
       setTimeOutput(session)
     }
