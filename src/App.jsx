@@ -117,7 +117,9 @@ function App() {
     setIsInSession(0)
     setSession(25)
     setBreak(5)
-    timerRef.current.innerHTML = `${isInBreak==1?_break:session}:00`
+    setTimeOutput(25)
+    // timerRef.current.innerHTML = `${isInBreak==1?_break:session}:00`
+    timerRef.current.innerHTML = `${timeOutput}:00`
     audioRef.current.pause()
     audioRef.current.currentTime = 0
     setIsResetting(0)
@@ -160,7 +162,9 @@ function App() {
     // if(isInBreak==0 && isResetting==0){
     //   timerRef.current.innerHTML = `${isInBreak==1?_break:session}:00`
     // }
-    setTimeOutput(session)
+    if(isResetting==0 && isInBreak==0){
+      setTimeOutput(session)
+    }
     break_timer.addEventListener('targetAchieved', breakTimerEnd)
     return () => {
       break_timer.removeEventListener('targetAchieved', breakTimerEnd)
