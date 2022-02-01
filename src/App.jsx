@@ -17,13 +17,14 @@ function App() {
     target: { seconds: 0 }
   })
   const timerRef = useRef(null)
-  const timerLabel = useRef(null)
   const audioRef = useRef(null)
   const [session_isStarted, setSessionIsStarted] = useState(0)
   const [break_isStarted, setBreakIsStarted] = useState(0)
   const [isInSession, setIsInSession] = useState(0)
   const [isInBreak, setIsInBreak] = useState(0)
   const [isResetting, setIsResetting] = useState(0)
+  const [timerLabel, setTimerLabel] = useState('Session')
+  const [timeOutput, setTimeOutput] = useState(session)
 
   // const startStopSessionTimer = () => {
   //   if(session_isStarted==0){
@@ -89,8 +90,9 @@ function App() {
     setIsInSession(0)
     audioRef.current.play()
     break_timer.start({
-      startValues: {minutes: _break}
+      startValues: {minutes: _break, seconds: 1}
     })
+    // setTimerLabel('Break')
   }
 
   const breakTimerEnd = () => {
@@ -99,15 +101,16 @@ function App() {
     setIsInBreak(0)
     audioRef.current.play()
     session_timer.start({
-      startValues: {minutes: session}
+      startValues: {minutes: session, seconds: 1}
     })
+    // setTimerLabel('Session')
   }
 
   const resetTimer = () => {
     setIsResetting(1)
     session_timer.stop()
     break_timer.stop()
-    timerLabel.current.innerHTML = 'Session'
+    setTimerLabel('Session')
     setSessionIsStarted(0)
     setBreakIsStarted(0)
     setIsInBreak(0)
@@ -125,7 +128,7 @@ function App() {
       timerRef.current.innerHTML = session_timer.getTimeValues().toString(['minutes', 'seconds'])
     })
     session_timer.addEventListener('started', () => {
-      timerLabel.current.innerHTML = 'Session'
+      setTimerLabel('Session')
       setIsInSession(1)
     })
   },[])
@@ -135,14 +138,17 @@ function App() {
       timerRef.current.innerHTML = break_timer.getTimeValues().toString(['minutes', 'seconds'])
     })
     break_timer.addEventListener('started', () => {
-      timerLabel.current.innerHTML = 'Break'
+      setTimerLabel('Break')
       setIsInBreak(1)
     })
   },[])
 
   useEffect(() => {
-    if(isInBreak==1 && isResetting==0){
-      timerRef.current.innerHTML = `${isInBreak==1?_break:session}:00`
+    // if(isInBreak==1 && isResetting==0){
+    //   timerRef.current.innerHTML = `${isInBreak==1?_break:session}:00`
+    // }
+    if(isResetting==0 && isInBreak==1){
+      setTimeOutput(_break)
     }
     session_timer.addEventListener('targetAchieved', sessionTimerEnd)
     return () => {
@@ -151,9 +157,10 @@ function App() {
   },[_break])
 
   useEffect(() => {
-    if(isInBreak==0 && isResetting==0){
-      timerRef.current.innerHTML = `${isInBreak==1?_break:session}:00`
-    }
+    // if(isInBreak==0 && isResetting==0){
+    //   timerRef.current.innerHTML = `${isInBreak==1?_break:session}:00`
+    // }
+    setTimeOutput(session)
     break_timer.addEventListener('targetAchieved', breakTimerEnd)
     return () => {
       break_timer.removeEventListener('targetAchieved', breakTimerEnd)
@@ -221,8 +228,8 @@ function App() {
           </div>
         </div>
         <div className='clock'>
-          <div id="timer-label" ref={timerLabel}>Session</div>
-          <div id="time-left" ref={timerRef}>{`${isInBreak==1?_break:session}:00`}</div>
+          <div id="timer-label">{timerLabel}</div>
+        <div id="time-left" ref={timerRef}>{`${timeOutput}:00`}</div>
           <div className="time-control">
             <button id="start_stop" onClick={startStopTimer}>
               <i className="bi bi-play-fill"></i>
