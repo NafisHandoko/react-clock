@@ -107,3 +107,18 @@ footer{
   font-size: 24px;
   padding-bottom: 10px;
 }
+
+@media (max-width: 768px){
+  section{
+    flex-direction: column-reverse;
+  }
+  .break-session{
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 400px){
+  h1{
+    font-size: 48px;
+  }
+}
