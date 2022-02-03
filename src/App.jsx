@@ -4,6 +4,7 @@ import './App.css'
 import useTimer from 'easytimer-react-hook'
 
 function App() {
+  const [timeOutput, setTimeOutput] = useState('25:00')
   const [_break, setBreak] = useState(5)
   const [session, setSession] = useState(25)
   const [session_timer, isSessionTargetAchieved] = useTimer({
@@ -16,7 +17,7 @@ function App() {
     countdown: true,
     target: { seconds: 0 }
   })
-  const timerRef = useRef(null)
+  // const timerRef = useRef(null)
   const audioRef = useRef(null)
   const [session_isStarted, setSessionIsStarted] = useState(0)
   const [break_isStarted, setBreakIsStarted] = useState(0)
@@ -24,7 +25,6 @@ function App() {
   const [isInBreak, setIsInBreak] = useState(0)
   const [isResetting, setIsResetting] = useState(0)
   const [timerLabel, setTimerLabel] = useState('Session')
-  const [timeOutput, setTimeOutput] = useState(session)
 
   const startStopTimer = () => {
     if(isInSession==0 && isInBreak==0){
@@ -87,8 +87,8 @@ function App() {
     setIsInSession(0)
     setSession(25)
     setBreak(5)
-    setTimeOutput(25)
-    timerRef.current.innerHTML = `${timeOutput}:00`
+    setTimeOutput('25:00')
+    // timerRef.current.innerHTML = `${timeOutput}:00`
     audioRef.current.pause()
     audioRef.current.currentTime = 0
     setIsResetting(0)
@@ -96,7 +96,8 @@ function App() {
 
   useEffect(() => {
     session_timer.addEventListener('secondsUpdated', () => {
-      timerRef.current.innerHTML = session_timer.getTimeValues().toString(['minutes', 'seconds'])
+      // timerRef.current.innerHTML = session_timer.getTimeValues().toString(['minutes', 'seconds'])
+      setTimeOutput(session_timer.getTimeValues().toString(['minutes', 'seconds']))
     })
     session_timer.addEventListener('started', () => {
       setTimerLabel('Session')
@@ -106,7 +107,8 @@ function App() {
 
   useEffect(() => {
     break_timer.addEventListener('secondsUpdated', () => {
-      timerRef.current.innerHTML = break_timer.getTimeValues().toString(['minutes', 'seconds'])
+      // timerRef.current.innerHTML = break_timer.getTimeValues().toString(['minutes', 'seconds'])
+      setTimeOutput(break_timer.getTimeValues().toString(['minutes', 'seconds']))
     })
     break_timer.addEventListener('started', () => {
       setTimerLabel('Break')
@@ -116,7 +118,7 @@ function App() {
 
   useEffect(() => {
     if(isResetting==0 && isInBreak==1){
-      setTimeOutput(_break)
+      setTimeOutput(`${_break}:00`)
     }
     session_timer.addEventListener('targetAchieved', sessionTimerEnd)
     return () => {
@@ -126,7 +128,7 @@ function App() {
 
   useEffect(() => {
     if(isResetting==0 && isInBreak==0){
-      setTimeOutput(session)
+      setTimeOutput(`${session}:00`)
     }
     break_timer.addEventListener('targetAchieved', breakTimerEnd)
     return () => {
@@ -196,7 +198,7 @@ function App() {
         </div>
         <div className='clock'>
           <div id="timer-label">{timerLabel}</div>
-        <div id="time-left" ref={timerRef}>{`${timeOutput}:00`}</div>
+        <div id="time-left">{timeOutput}</div>
           <div className="time-control">
             <button id="start_stop" onClick={startStopTimer}>
               <i className="bi bi-play-fill"></i>
