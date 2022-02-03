@@ -17,7 +17,6 @@ function App() {
     countdown: true,
     target: { seconds: 0 }
   })
-  // const timerRef = useRef(null)
   const audioRef = useRef(null)
   const [session_isStarted, setSessionIsStarted] = useState(0)
   const [break_isStarted, setBreakIsStarted] = useState(0)
@@ -88,7 +87,6 @@ function App() {
     setSession(25)
     setBreak(5)
     setTimeOutput('25:00')
-    // timerRef.current.innerHTML = `${timeOutput}:00`
     audioRef.current.pause()
     audioRef.current.currentTime = 0
     setIsResetting(0)
@@ -96,7 +94,6 @@ function App() {
 
   useEffect(() => {
     session_timer.addEventListener('secondsUpdated', () => {
-      // timerRef.current.innerHTML = session_timer.getTimeValues().toString(['minutes', 'seconds'])
       setTimeOutput(session_timer.getTimeValues().toString(['minutes', 'seconds']))
     })
     session_timer.addEventListener('started', () => {
@@ -107,7 +104,6 @@ function App() {
 
   useEffect(() => {
     break_timer.addEventListener('secondsUpdated', () => {
-      // timerRef.current.innerHTML = break_timer.getTimeValues().toString(['minutes', 'seconds'])
       setTimeOutput(break_timer.getTimeValues().toString(['minutes', 'seconds']))
     })
     break_timer.addEventListener('started', () => {
