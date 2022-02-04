@@ -11,6 +11,15 @@ body{
   color: white;
 }
 
+a, i{
+  text-decoration: none;
+  transition: all 0.1s ease-in-out;
+}
+
+a:hover, i:hover{
+  text-shadow: 0 0 10px #fff;
+}
+
 button{
   cursor: pointer;
 }

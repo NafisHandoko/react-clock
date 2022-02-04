@@ -217,7 +217,7 @@ function App() {
         <a className='repo' href="https://github.com/NafisHandoko/react-clock" target="_blank" rel="noopener noreferrer">
           <i className="bi bi-github"></i>
         </a>
-        Made with ❤️ by Nafis Handoko
+        <span>Made with ❤️ by <a href="https://github.com/NafisHandoko" target="_blank" rel="noopener noreferrer">Nafis Handoko</a></span>
       </footer>
     </div>
   )
