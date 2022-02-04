@@ -24,6 +24,7 @@ function App() {
   const [isInBreak, setIsInBreak] = useState(0)
   const [isResetting, setIsResetting] = useState(0)
   const [timerLabel, setTimerLabel] = useState('Session')
+  const [playPauseIcon, setPlayPauseIcon] = useState('play')
 
   const startStopTimer = () => {
     if(isInSession==0 && isInBreak==0){
@@ -32,25 +33,30 @@ function App() {
       })
       setSessionIsStarted(1)
       setIsInSession(1)
+      setPlayPauseIcon('pause')
     }else if(isInSession==1 && isInBreak==0){
       if(session_isStarted==1){
         session_timer.pause()
         setSessionIsStarted(0)
+        setPlayPauseIcon('play')
       }else if(session_isStarted==0){
         session_timer.start({
           startValues: {minutes: session}
         })
         setSessionIsStarted(1)
+        setPlayPauseIcon('pause')
       }
     }else if(isInSession==0 && isInBreak==1){
       if(break_isStarted==1){
         break_timer.pause()
         setBreakIsStarted(0)
+        setPlayPauseIcon('play')
       }else if(break_isStarted==0){
         break_timer.start({
           startValues: {minutes: _break}
         })
         setBreakIsStarted(1)
+        setPlayPauseIcon('pause')
       }
     }
   }
@@ -89,6 +95,7 @@ function App() {
     setTimeOutput('25:00')
     audioRef.current.pause()
     audioRef.current.currentTime = 0
+    setPlayPauseIcon('play')
     setIsResetting(0)
   }
 
@@ -197,7 +204,7 @@ function App() {
         <div id="time-left">{timeOutput}</div>
           <div className="time-control">
             <button id="start_stop" onClick={startStopTimer}>
-              <i className="bi bi-play-fill"></i>
+              <i className={`bi bi-${playPauseIcon}-fill`}></i>
             </button>
             <button id="reset" onClick={resetTimer}>
               <i className="bi bi-arrow-clockwise"></i>
