@@ -76,7 +76,7 @@ Here's a list of the technologies I used to build this project
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-You just need to open <a href="https://nafishandoko-rclock.netlify.app/">this project demo</a>. After it loads properly, you can use it like you use a calculator as usual.
+You just need to open <a href="https://nafishandoko-rclock.netlify.app/">this project demo</a>. Once loaded properly, you can press the play button to start the timer. By default, the timer uses 25-minute sessions and 5-minute breaks. But you can adjust it by pressing the plus or minus button to increase and decrease the session and break values.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
